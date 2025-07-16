@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lettre d'anniversaire</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #fff0f5, #ffe4e1);
+      font-family: 'Caveat', cursive;
+      overflow: hidden;
+    }
+    .letter-container {
+      position: relative;
+      width: 90%;
+      max-width: 600px;
+      background: #ffffff;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      padding: 40px;
+      text-align: center;
+      color: #333;
+      animation: fadeIn 1s ease-in-out;
+      box-sizing: border-box;
+    }
+    .letter-container h1 {
+      font-size: 36px;
+      color: #ff69b4;
+      margin-bottom: 20px;
+    }
+    .letter-container p {
+      font-size: 22px;
+      line-height: 1.6;
+      margin: 0 0 20px;
+    }
+    .highlight {
+      color: #ff1493;
+      font-weight: bold;
+    }
+    .signature {
+      font-size: 24px;
+      color: #c71585;
+      margin-top: 20px;
+    }
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      background: #ff69b4;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 25px;
+      font-size: 18px;
+      margin-top: 20px;
+      transition: transform 0.3s, background 0.3s;
+    }
+    .button:hover {
+      transform: scale(1.1);
+      background: #ff1493;
+    }
+    .back-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #ff69b4;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+      font-family: 'Caveat', cursive;
+    }
+    .back-btn:hover {
+      background: #ff1493;
+      transform: scale(1.1);
+    }
+    #confetti-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 600px) {
+      .letter-container {
+        padding: 20px;
+      }
+      .letter-container h1 {
+        font-size: 28px;
+      }
+      .letter-container p {
+        font-size: 18px;
+      }
+      .back-btn {
+        font-size: 16px;
+        padding: 8px 16px;
+      }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="letter-container">
+  <h1>Joyeux Anniversaire, Doudou Chou !</h1>
+  <p>
+    Mon cher Edouard, aujourd'hui est un jour spécial, alors joyeux anniversaire ! Ne pouvant pas être présente :<br>
+    Je t'invite <span class="highlight">au restaurant</span> dès qu'on pourra se voir.
+    <br>
+    Passe une excellente journée! 🎉
+  </p>
+  <p class="signature">Gros bisous baveux, <br> Emeline</p>
+  <a href="#" class="button">Hâte de fêter avec toi !</a>
+  <button class="back-btn" onclick="goBack()">Retour</button>
+</div>
+<canvas id="confetti-canvas"></canvas>
+
+<script>
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  let confetti = [];
+  let lastTime = 0;
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  class Confetti {
+    constructor() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * -canvas.height;
+      this.vx = Math.random() * 4 - 2;
+      this.vy = Math.random() * 3 + 2;
+      this.color = ['#ff69b4', '#ff1493', '#00b7eb', '#ffd700'][Math.floor(Math.random() * 4)];
+      this.size = Math.random() * 5 + 3;
+      this.alpha = 1;
+      this.life = 200;
+    }
+
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      this.alpha -= 0.005;
+      this.life--;
+    }
+
+    draw() {
+      ctx.globalAlpha = this.alpha;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  function startConfetti() {
+    for (let i = 0; i < 100; i++) {
+      confetti.push(new Confetti());
+    }
+    requestAnimationFrame(animateConfetti);
+  }
+
+  function animateConfetti(timestamp) {
+    if (!lastTime) lastTime = timestamp;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    confetti = confetti.filter((particle) => particle.life > 0);
+    confetti.forEach((particle) => {
+      particle.update();
+      particle.draw();
+    });
+    if (confetti.length > 0) {
+      requestAnimationFrame(animateConfetti);
+    } else {
+      lastTime = 0;
+    }
+  }
+
+  startConfetti();
+
+  function goBack() {
+    window.location.href = 'index.html';
+  }
+</script>
+</body>
+</html>

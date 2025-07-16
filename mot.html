@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #ffebf2, #d6f0fa);
+            font-family: 'Comic Neue', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        .message {
+            font-size: 18px;
+            font-weight: 400;
+            color: #ff69b4;
+            line-height: 1.6;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+            animation: fadeIn 1.5s ease-in;
+        }
+        .message strong {
+            font-weight: 700;
+            color: #ff1493;
+        }
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff69b4;
+            transform: rotate(45deg);
+            animation: floatUp 5s linear forwards;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .heart:before,
+        .heart:after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff69b4;
+            border-radius: 50%;
+        }
+        .heart:before { top: -10px; left: 0; }
+        .heart:after { left: -10px; top: 0; }
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(45deg); opacity: 1; }
+            100% { transform: translateY(-700px) rotate(45deg); opacity: 0; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .back-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #ff69b4;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .back-btn:hover {
+            background: #ff1493;
+            transform: scale(1.1);
+        }
+        @media (max-width: 600px) {
+            .message {
+                font-size: 16px;
+                max-width: 250px;
+            }
+            .back-btn {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+<p class="message">
+    Mon Edouard , j'ai menti ,<br>
+    dans mon rêve on sortait ensemble.<br>
+    Et j'espère à 100% qu'il se réalisera.<br>
+    <strong> Des gros bisous.</strong>
+</p>
+<button class="back-btn" onclick="goBack()">Retour</button>
+
+<script>
+    // Floating hearts
+    function createHeart() {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.style.left = Math.random() * window.innerWidth + 'px';
+        heart.style.top = window.innerHeight + 'px';
+        document.body.appendChild(heart);
+        heart.addEventListener('animationend', () => {
+            heart.remove();
+        });
+    }
+
+    setInterval(createHeart, 500);
+
+    // Back button navigation
+    function goBack() {
+        window.location.href = 'index.html';
+    }
+</script>
+</body>
+</html>
